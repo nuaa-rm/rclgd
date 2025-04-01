@@ -1,0 +1,90 @@
+[gd_scene load_steps=10 format=3 uid="uid://dy8cpq5f78jgo"]
+
+[ext_resource type="Script" uid="uid://bx07w7e2887kw" path="res://fps.gd" id="1_a202f"]
+[ext_resource type="Script" uid="uid://co56mbdwx7hbf" path="res://ros_2_subscription.gd" id="2_a0tk4"]
+[ext_resource type="Script" uid="uid://d2e3umckadu0v" path="res://ros_2_publisher.gd" id="2_noarx"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_4xowi"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_a202f"]
+sky_material = SubResource("ProceduralSkyMaterial_4xowi")
+
+[sub_resource type="Environment" id="Environment_noarx"]
+background_mode = 2
+sky = SubResource("Sky_a202f")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_a202f"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a0tk4"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_a202f")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_noarx"]
+resource_local_to_scene = true
+albedo_color = Color(1, 0, 0, 1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_noarx")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="SubViewport" type="SubViewport" parent="."]
+size = Vector2i(2, 2)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+current = true
+
+[node name="Label" type="Label" parent="SubViewport"]
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("1_a202f")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.155, 0, -1.485)
+material = SubResource("StandardMaterial3D_a0tk4")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.155, 0.701518, -1.485)
+size = Vector3(0.5, 0.5, 0.5)
+material = SubResource("StandardMaterial3D_noarx")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.79739, 0, 1.43448)
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("1_a202f")
+
+[node name="Ros2Node" type="Ros2Node" parent="."]
+node_name = &"camera_node"
+
+[node name="Ros2Subscription" type="Ros2Subscription" parent="Ros2Node"]
+topic_name = &"ci"
+message_type = &"sensor_msgs/msg/CameraInfo"
+script = ExtResource("2_a0tk4")
+
+[node name="ImagePublisher" type="ImagePublisher" parent="Ros2Node"]
+fps = 1.0
+viewport_path = NodePath("../../SubViewport")
+
+[node name="Ros2Node2" type="Ros2Node" parent="."]
+node_name = &"serial_node"
+
+[node name="Ros2Publisher" type="Ros2Publisher" parent="Ros2Node2"]
+topic_name = &"ci"
+message_type = &"sensor_msgs/msg/CameraInfo"
+script = ExtResource("2_noarx")
+
+[connection signal="message_received" from="Ros2Node/Ros2Subscription" to="Ros2Node/Ros2Subscription" method="_on_message_received"]
