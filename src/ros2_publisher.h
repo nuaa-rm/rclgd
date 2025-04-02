@@ -76,9 +76,9 @@ namespace godot {
 
         bool test_valid() override {
             bool ret = Ros2Communication::test_valid();
-            if (!topic_name.is_valid_ascii_identifier()) {
-                return false;
-            }
+//            if (!topic_name.is_valid_ascii_identifier()) {
+//                return false;
+//            }
             return ret;
         }
 

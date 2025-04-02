@@ -73,9 +73,9 @@ namespace godot {
 
         bool test_valid() override {
             bool ret = Ros2Communication::test_valid();
-            if (!topic_name.is_valid_ascii_identifier()) {
-                return false;
-            }
+//            if (!topic_name.is_valid_ascii_identifier()) {
+//                return false;
+//            }
             return ret;
         }
 
@@ -86,9 +86,9 @@ namespace godot {
                 warnings.append("Property topic_name is empty!");
             }
 
-            if (!topic_name.is_valid_ascii_identifier()) {
-                warnings.append("Property topic_name is invalid!");
-            }
+//            if (!topic_name.is_valid_ascii_identifier()) {
+//                warnings.append("Property topic_name is invalid!");
+//            }
 
             return warnings;
         }
@@ -102,7 +102,7 @@ namespace godot {
                 subscription = node->create_generic_subscription(
                         String(topic_name).utf8().ptr(),
                         String(message_type).utf8().ptr(),
-                        10,
+                        rclcpp::SensorDataQoS(),
                         std::bind(&Ros2Subscription::callback, this, std::placeholders::_1)
                 );
             } catch (const std::exception &e) {
@@ -119,6 +119,7 @@ namespace godot {
             memcpy(array.ptrw(), serializedMessage->get_rcl_serialized_message().buffer,
                    serializedMessage->get_rcl_serialized_message().buffer_length);
             int64_t offset = 4;
+            print_error(array);
             Dictionary msg = bin_to_msg(array, message_info, offset);
             emit_signal("message_received", msg);
         }

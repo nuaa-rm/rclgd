@@ -229,22 +229,25 @@ Variant bin_to_single_msg(const PackedByteArray &bin, const Dictionary &msg_deta
         if (size % 4 != 0) {
             offset += 4 - size % 4;
         }
+        if ((size - 1) % 8 >= 4){
+            offset += 4;
+        }
         return s;
     } else {
         switch (type_id) {
             case rosidl_typesupport_introspection_cpp::ROS_TYPE_BOOL: {
                 bool ret = bin.decode_u8(offset);
-                offset += 4;
+                offset += 1;
                 return ret;
             }
             case rosidl_typesupport_introspection_cpp::ROS_TYPE_BYTE: {
                 auto ret = bin.decode_u8(offset);
-                offset += 4;
+                offset += 1;
                 return ret;
             }
             case rosidl_typesupport_introspection_cpp::ROS_TYPE_CHAR: {
                 auto ret = bin.decode_s8(offset);
-                offset += 4;
+                offset += 1;
                 return ret;
             }
             case rosidl_typesupport_introspection_cpp::ROS_TYPE_FLOAT: {
@@ -264,12 +267,12 @@ Variant bin_to_single_msg(const PackedByteArray &bin, const Dictionary &msg_deta
             }
             case rosidl_typesupport_introspection_cpp::ROS_TYPE_INT8: {
                 auto ret = bin.decode_s8(offset);
-                offset += 4;
+                offset += 1;
                 return ret;
             }
             case rosidl_typesupport_introspection_cpp::ROS_TYPE_INT16: {
                 auto ret = bin.decode_s16(offset);
-                offset += 4;
+                offset += 2;
                 return ret;
             }
             case rosidl_typesupport_introspection_cpp::ROS_TYPE_INT32: {
@@ -284,12 +287,12 @@ Variant bin_to_single_msg(const PackedByteArray &bin, const Dictionary &msg_deta
             }
             case rosidl_typesupport_introspection_cpp::ROS_TYPE_UINT8: {
                 auto ret = bin.decode_u8(offset);
-                offset += 4;
+                offset += 1;
                 return ret;
             }
             case rosidl_typesupport_introspection_cpp::ROS_TYPE_UINT16: {
                 auto ret = bin.decode_u16(offset);
-                offset += 4;
+                offset += 2;
                 return ret;
             }
             case rosidl_typesupport_introspection_cpp::ROS_TYPE_UINT32: {
@@ -304,7 +307,7 @@ Variant bin_to_single_msg(const PackedByteArray &bin, const Dictionary &msg_deta
             }
             case rosidl_typesupport_introspection_cpp::ROS_TYPE_WCHAR: {
                 auto ret = bin.decode_u32(offset);
-                offset += 4;
+                offset += 2;
                 return ret;
             }
             default:
