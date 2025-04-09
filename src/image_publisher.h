@@ -200,8 +200,8 @@ namespace godot {
 
             double phi = 2.0 * atan(24.0 * tan(theta / 2) / 36.0);
 
-            double fx = width / (2.0 * tan(theta / 2.0));
-            double fy = height / (2.0 * tan(phi / 2.0));
+            double fx = width / (2.0 * tan(theta / 2.0)) / 1.5;
+            double fy = height / (2.0 * tan(phi / 2.0)) / 1.5;
 
 
             camera_info->k = {fx, 0.0, width / 2.0,

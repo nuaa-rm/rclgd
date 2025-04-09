@@ -1,8 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://dy8cpq5f78jgo"]
+[gd_scene load_steps=9 format=3 uid="uid://dy8cpq5f78jgo"]
 
 [ext_resource type="Script" uid="uid://bx07w7e2887kw" path="res://fps.gd" id="1_a202f"]
 [ext_resource type="Script" uid="uid://co56mbdwx7hbf" path="res://ros_2_subscription.gd" id="2_a0tk4"]
-[ext_resource type="Script" uid="uid://d2e3umckadu0v" path="res://ros_2_publisher.gd" id="2_noarx"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_4xowi"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -71,20 +70,12 @@ script = ExtResource("1_a202f")
 node_name = &"camera_node"
 
 [node name="Ros2Subscription" type="Ros2Subscription" parent="Ros2Node"]
-topic_name = &"ci"
-message_type = &"sensor_msgs/msg/CameraInfo"
+topic_name = &"/armor_solver/cmd_gimbal"
+message_type = &"rm_interfaces/msg/GimbalCmd"
 script = ExtResource("2_a0tk4")
 
 [node name="ImagePublisher" type="ImagePublisher" parent="Ros2Node"]
 fps = 1.0
 viewport_path = NodePath("../../SubViewport")
-
-[node name="Ros2Node2" type="Ros2Node" parent="."]
-node_name = &"serial_node"
-
-[node name="Ros2Publisher" type="Ros2Publisher" parent="Ros2Node2"]
-topic_name = &"ci"
-message_type = &"sensor_msgs/msg/CameraInfo"
-script = ExtResource("2_noarx")
 
 [connection signal="message_received" from="Ros2Node/Ros2Subscription" to="Ros2Node/Ros2Subscription" method="_on_message_received"]

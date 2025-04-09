@@ -119,7 +119,6 @@ namespace godot {
             memcpy(array.ptrw(), serializedMessage->get_rcl_serialized_message().buffer,
                    serializedMessage->get_rcl_serialized_message().buffer_length);
             int64_t offset = 4;
-            print_error(array);
             Dictionary msg = bin_to_msg(array, message_info, offset);
             emit_signal("message_received", msg);
         }
