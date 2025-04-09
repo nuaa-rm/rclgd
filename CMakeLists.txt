@@ -1,11 +1,10 @@
 cmake_minimum_required(VERSION 3.8)
 project(rclgd)
 
+set(GODOTCPP_DISABLE_EXCEPTIONS OFF CACHE BOOL "enable exceptions" FORCE)
 add_subdirectory(godot-cpp)
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY)
-
-set(GODOTCPP_DISABLE_EXCEPTIONS OFF)
 
 find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
